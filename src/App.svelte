@@ -13,6 +13,12 @@
       <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
     </a>
   </div>
+  <div>
+    test
+    <p>
+      test_p
+    </p>
+  </div>
   <h1>Vite + Svelte</h1>
 
   <div class="card">
