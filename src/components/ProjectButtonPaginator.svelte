@@ -3,11 +3,11 @@
 
     let currentPage = $state(0);
     let totalPages = $state(0);
-    
+
     // References to DOM elements
     let viewport = $state();
     let track = $state();
-    
+
     // The calculated pixel value to move the track
     let translateX = $state(0);
 
@@ -24,15 +24,16 @@
         // Dependencies: run this when currentPage, viewport, or track changes
         if (viewport && track && track.children[currentPage]) {
             const activeChild = track.children[currentPage];
-            
+
             // Get dimensions
             const viewportWidth = viewport.offsetWidth;
             const childLeft = activeChild.offsetLeft;
             const childWidth = activeChild.offsetWidth;
 
             // Math: Center of Viewport - Center of Child
-            const centerPosition = (viewportWidth / 2) - (childLeft + childWidth / 2);
-            
+            const centerPosition =
+                viewportWidth / 2 - (childLeft + childWidth / 2);
+
             translateX = centerPosition;
         }
     });
@@ -44,7 +45,7 @@
     function prevPage() {
         if (currentPage > 0) currentPage--;
     }
-    
+
     function goToPage(index) {
         currentPage = index;
     }
@@ -53,21 +54,26 @@
 <div class="main">
     <div class="indicators">
         {#each Array(totalPages) as _, i}
-            <button 
-                class="dot" 
-                class:active={i === currentPage} 
+            <button
+                title="Go to page {i + 1}"
+                class="dot"
+                class:active={i === currentPage}
                 onclick={() => goToPage(i)}
             ></button>
         {/each}
     </div>
 
-    <button class="nav-btn left" onclick={prevPage} disabled={currentPage === 0}>
+    <button
+        class="nav-btn left"
+        onclick={prevPage}
+        disabled={currentPage === 0}
+    >
         &lt;
     </button>
 
     <div class="content" bind:this={viewport}>
-        <div 
-            class="track" 
+        <div
+            class="track"
             bind:this={track}
             style="transform: translateX({translateX}px)"
         >
@@ -75,7 +81,11 @@
         </div>
     </div>
 
-    <button class="nav-btn right" onclick={nextPage} disabled={currentPage === totalPages - 1}>
+    <button
+        class="nav-btn right"
+        onclick={nextPage}
+        disabled={currentPage === totalPages - 1}
+    >
         &gt;
     </button>
 </div>
@@ -86,13 +96,19 @@
         display: flex;
         align-items: center;
         width: 100%;
+        padding-top: 60px;
         overflow: hidden; /* Ensures buttons stick to sides if parent is small */
+        transition: all 0.3s ease-out;
+    }
+    
+    @media (max-width: 768px) {
+       
     }
 
     /* 1. The Mask */
     .content {
-        flex: 1;             /* Fill remaining space between buttons */
-        overflow: hidden;    /* Hide elements that are too far off-screen */
+        flex: 1; /* Fill remaining space between buttons */
+        overflow: hidden; /* Hide elements that are too far off-screen */
         position: relative;
         /* Optional: Add a mask fade effect on sides */
         /* mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); */
@@ -100,27 +116,29 @@
 
     /* 2. The Track */
     .track {
-        display: flex;       /* Arrange children in a row */
-        width: max-content;  /* Allow track to be as wide as all children combined */
-        gap: 20px;           /* Space between items */
-        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth Slide */
+        display: flex; /* Arrange children in a row */
+        width: max-content; /* Allow track to be as wide as all children combined */
+        gap: 20px; /* Space between items */
+        transition: transform 0.4s ease-in-out; /*cubic-bezier(0.25, 1, 0.5, 1);  Smooth Slide */
         will-change: transform;
-        
+
         /* Ensure the first item starts somewhat centrally if needed */
-        padding: 0 50px; 
+        padding: 0 50px;
     }
 
     /* 3. The Children */
     /* Use :global because children are passed in */
     .track > :global(*) {
-        flex-shrink: 0;      /* CRITICAL: Prevent items from squishing */
+        flex-shrink: 0; /* CRITICAL: Prevent items from squishing */
         /* Note: We do NOT set width here, effectively keeping your original width */
     }
+
+    
 
     /* Button Styles (Simplified for brevity) */
     .nav-btn {
         z-index: 2;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         color: white;
         border: none;
         padding: 1rem;
@@ -128,15 +146,24 @@
     }
     .indicators {
         position: absolute;
-        bottom: 20px; /* Adjusted to bottom for standard layout */
+        top: 25px; /* Adjusted to bottom for standard layout */
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        gap: 10px;
+        gap: 25px;
         z-index: 10;
     }
     .dot {
-        width: 10px; height: 10px; border-radius: 50%; background: #ccc; border:none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #ccc;
+        opacity: 0.1;
+        border: none;
+        transition: all 0.3s ease-out;
     }
-    .dot.active { background: #fff; transform: scale(1.2); }
+    .dot.active {
+        opacity: 0.9;
+        transform: scale(1.5);
+    }
 </style>

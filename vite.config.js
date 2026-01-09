@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [svelte()],
   base: '/portfolio/',
   build: {
-    outDir: 'docs', // Changes output from 'dist' to 'docs'
+    outDir: 'docs',
   },
   server: {
     watch: {
